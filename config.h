@@ -11,7 +11,9 @@ public:
         Autostart,
         Manulay
     };
-
+    Config()
+    {
+    }
     Config(QString name, QString command, RunType type)
     {
         this->name = name;
