@@ -36,7 +36,7 @@ void MainWindow::loadFile()
     {
           names->addItem(it.key());
     }
-    connect(names, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(invoke(QListWidgetItem*)));
+    connect(names, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(invokeOne(QListWidgetItem*)));
 }
 
 void MainWindow::invokeOne(QListWidgetItem* item)
