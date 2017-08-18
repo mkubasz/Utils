@@ -16,6 +16,7 @@ SOURCES += main.cpp\
         mainwindow.cpp
 
 HEADERS  += mainwindow.h \
-    config.hpp
+    parserconfig.hpp \
+    config.h
 
 FORMS    += mainwindow.ui

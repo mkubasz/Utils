@@ -1,12 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <parserconfig.hpp>
 #include <QPushButton>
-#include <QFileDialog>
 #include <QFile>
+#include <QFileDialog>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QProcess>
 #include <QDebug>
-#include <config.hpp>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -14,10 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QPushButton *btnLoad = ui->btnLoad;
     names = ui->names;
-    connect(btnLoad, SIGNAL(released()), this, SLOT(loadFile()));
-    //connect(btnCheck, SIGNAL(released()),this, SLOT(checkPassword()));
+    connect(ui->btnLoad, SIGNAL(released()), this, SLOT(loadFile()));
+    connect(ui->btnInvoke, SIGNAL(released()),this, SLOT(invokeAll()));
 }
 
 void MainWindow::loadFile()
@@ -28,27 +28,42 @@ void MainWindow::loadFile()
     QJsonDocument jdoc = QJsonDocument::fromJson(file.readAll());
     QJsonObject obj = jdoc.object();
     file.close();
-    Config conf(obj);
-    QMap<QString, QString> map = conf.map;
+    ParserConfig parser(obj);
+
+    map = parser.getMap();
+    names->clear();
     for(auto it = map.begin(); it != map.end(); ++it)
     {
-          names->addItem("Test");
+          names->addItem(it.key());
     }
+    connect(names, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(invoke(QListWidgetItem*)));
 }
 
-//void MainWindow::checkPassword()
-//{
-//    QString pass = ui->boxPassword->text();
-//    QProcess process;
-//    process.setProcessChannelMode(QProcess::MergedChannels);
-//    process.start("/bin/bash", QStringList()<< "-c" << "docker restart decisco");
-//    process.waitForFinished();
-//    qDebug()<< process.readAllStandardError();
-//    qDebug()<< process.readAllStandardOutput();
-//    process.close();
-//}
+void MainWindow::invokeOne(QListWidgetItem* item)
+{
+    QString it = map[item->text()].command;
+    QProcess process;
+    process.setProcessChannelMode(QProcess::MergedChannels);
+    process.start("/bin/bash", QStringList() << "-c" << it);
+    process.waitForFinished();
+    qDebug() << process.readAllStandardError();
+    qDebug() << process.readAllStandardOutput();
+    process.close();
+}
 
-
+void MainWindow::invokeAll()
+{
+    QProcess process;
+    process.setProcessChannelMode(QProcess::MergedChannels);
+    for(auto it = map.begin(); it != map.end(); ++it)
+    {
+        process.start("/bin/bash", QStringList() << "-c" << it.value().command);
+        process.waitForFinished();
+        qDebug() << process.readAllStandardError();
+        qDebug() << process.readAllStandardOutput();
+        process.close();
+    }
+}
 
 MainWindow::~MainWindow()
 {

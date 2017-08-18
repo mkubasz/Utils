@@ -1,13 +1,15 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
+
+#include "config.h"
 #include <QMap>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
 
-class Config {
+class ParserConfig {
 public:
-    Config(QJsonObject& arr)
+    ParserConfig(QJsonObject& arr)
     {
         mapping(arr);
     }
@@ -18,10 +20,18 @@ public:
         foreach(const QJsonValue& it, arr)
         {
             QJsonObject val = it.toObject();
-            map.insert(val["name"].toString(), val["command"].toString());
+            Config conf(val["name"].toString(), val["command"].toString(), Config::RunType::Manulay);
+            map.insert(conf.name, conf);
         }
     }
-    QMap<QString, QString> map;
+
+    QMap<QString, Config> getMap() const
+    {
+        return map;
+    }
+
+private:
+    QMap<QString, Config> map;
 };
 
 #endif // CONFIG_HPP
