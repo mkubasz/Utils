@@ -27,6 +27,7 @@ private:
     Ui::MainWindow *ui;
     QListWidget* names;
     QMap<QString, Config> map;
+    void invoke(QString command);
 };
 
 #endif // MAINWINDOW_H

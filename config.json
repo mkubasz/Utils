@@ -1,6 +1,7 @@
 {
 	"configuration" : [
 		{"name" : "docker", "command" : "docker restart decisco"},
-		{"name" : "gedit", "command" : "gedit"}
+		{"name" : "gedit", "command" : " x-terminal-emulator -x bash -c \"echo true;bash\""},
+		{"name" : "bash", "command" : "bash"}
 	]
 }

@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMessageBox>
 #include <QProcess>
 #include <QDebug>
 
@@ -28,6 +29,11 @@ void MainWindow::loadFile()
     file.open(QIODevice::ReadOnly);
     QJsonDocument jdoc = QJsonDocument::fromJson(file.readAll());
     QJsonObject obj = jdoc.object();
+    if(obj.empty())
+    {
+        qDebug() << "Parse " + fn + " json file error.";
+        QMessageBox::critical(this, "Error", "Error parse json file",QMessageBox::StandardButton::Abort, NULL);
+    }
     file.close();
     ParserConfig parser(obj);
 
@@ -41,28 +47,27 @@ void MainWindow::loadFile()
 
 void MainWindow::invokeOne(QListWidgetItem* item)
 {
-    QString it = map[item->text()].command;
-    QProcess process;
-    process.setProcessChannelMode(QProcess::MergedChannels);
-    process.start("/bin/bash", QStringList() << "-c" << it);
-    process.waitForFinished();
-    qDebug() << process.readAllStandardError();
-    qDebug() << process.readAllStandardOutput();
-    process.close();
+    const QString command = map[item->text()].command;
+    invoke(command);
 }
 
 void MainWindow::invokeAll()
 {
-    QProcess process;
-    process.setProcessChannelMode(QProcess::MergedChannels);
     for(auto it = map.begin(); it != map.end(); ++it)
     {
-        process.start("/bin/bash", QStringList() << "-c" << it.value().command);
-        process.waitForFinished();
-        qDebug() << process.readAllStandardError();
-        qDebug() << process.readAllStandardOutput();
-        process.close();
+        invoke(it.value().command);
     }
+}
+
+void MainWindow::invoke(QString command)
+{
+    QProcess process;
+    process.setProcessChannelMode(QProcess::MergedChannels);
+    process.start("/bin/bash", QStringList() << "-c" << command);
+    process.waitForFinished();
+    qDebug() << "Pass: " << command << process.readAllStandardError();
+    qDebug() << "Error: " << command << process.readAllStandardOutput();
+    process.close();
 }
 
 MainWindow::~MainWindow()
