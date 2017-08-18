@@ -1,0 +1,6 @@
+{
+	"configuration" : [
+		{"name" : "docker", "command" : "docker restart decisco"},
+		{"name" : "gedit", "command" : "gedit"}
+	]
+}
