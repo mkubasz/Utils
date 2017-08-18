@@ -5,15 +5,15 @@
 
 class Config {
 public:
-
     enum class RunType
     {
         Autostart,
         Manulay
     };
-    Config()
-    {
-    }
+
+    Config() = default;
+    ~Config() = default;
+
     Config(QString name, QString command, RunType type)
     {
         this->name = name;

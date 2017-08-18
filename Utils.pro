@@ -4,19 +4,22 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
+QT       += core gui network webkitwidgets
+QT       += webkit
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Utils
 TEMPLATE = app
-
+CONFIG += c++11
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    editorwindows.cpp
 
 HEADERS  += mainwindow.h \
     parserconfig.hpp \
-    config.h
+    config.h \
+    editorwindows.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    editorwindows.ui

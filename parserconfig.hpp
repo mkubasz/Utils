@@ -9,9 +9,17 @@
 
 class ParserConfig {
 public:
+    ParserConfig() = default;
+    ~ParserConfig() = default;
+
     ParserConfig(QJsonObject& arr)
     {
         mapping(arr);
+    }
+
+    QMap<QString, Config> getMap() const
+    {
+        return map;
     }
 
     void mapping(QJsonObject& obj)
@@ -23,11 +31,6 @@ public:
             Config conf(val["name"].toString(), val["command"].toString(), Config::RunType::Manulay);
             map.insert(conf.name, conf);
         }
-    }
-
-    QMap<QString, Config> getMap() const
-    {
-        return map;
     }
 
 private:

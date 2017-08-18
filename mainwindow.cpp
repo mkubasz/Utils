@@ -1,12 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <parserconfig.hpp>
+#include "parserconfig.hpp"
 #include <QPushButton>
-#include <QFile>
-#include <QFileDialog>
+#include <QMessageBox>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QMessageBox>
+#include <QFile>
+#include <QFileDialog>
 #include <QProcess>
 #include <QDebug>
 
@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     names = ui->names;
+
+    // Set connects
     connect(ui->btnLoad, SIGNAL(released()), this, SLOT(loadFile()));
     connect(ui->btnInvoke, SIGNAL(released()),this, SLOT(invokeAll()));
     connect(names, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(invokeOne(QListWidgetItem*)));
@@ -24,25 +26,44 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::loadFile()
 {
-    QString fn = QFileDialog::getOpenFileName(this, tr("Open Config"),NULL, tr("Json Files (*.json)"));
+    ui->loaded->setChecked(false);
+    names->clear();
+    const QString fn = QFileDialog::getOpenFileName(this, tr("Open Config"),NULL, tr("Json Files (*.json)"));
+
     QFile file(fn);
     file.open(QIODevice::ReadOnly);
+
     QJsonDocument jdoc = QJsonDocument::fromJson(file.readAll());
     QJsonObject obj = jdoc.object();
+
     if(obj.empty())
     {
-        qDebug() << "Parse " + fn + " json file error.";
-        QMessageBox::critical(this, "Error", "Error parse json file",QMessageBox::StandardButton::Abort, NULL);
+        qDebug() << "Parse " + fn + " file error.";
+        QMessageBox::critical(this, "Error", "Error parse json file",QMessageBox::StandardButton::Abort, 0);
+        return;
     }
-    file.close();
-    ParserConfig parser(obj);
 
+    file.close();
+
+    ui->loaded->setChecked(true);
+    ParserConfig parser(obj);
     map = parser.getMap();
-    names->clear();
+
     for(auto it = map.begin(); it != map.end(); ++it)
     {
           names->addItem(it.key());
     }
+}
+
+void MainWindow::invoke(QString command)
+{
+    QProcess process;
+    process.setProcessChannelMode(QProcess::MergedChannels);
+    process.startDetached("/bin/bash", QStringList() << "-c" << command);
+    process.waitForFinished();
+    qDebug() << "Pass: " << command << process.readAllStandardError();
+    qDebug() << "Error: " << command << process.readAllStandardOutput();
+    process.close();
 }
 
 void MainWindow::invokeOne(QListWidgetItem* item)
@@ -59,18 +80,24 @@ void MainWindow::invokeAll()
     }
 }
 
-void MainWindow::invoke(QString command)
-{
-    QProcess process;
-    process.setProcessChannelMode(QProcess::MergedChannels);
-    process.start("/bin/bash", QStringList() << "-c" << command);
-    process.waitForFinished();
-    qDebug() << "Pass: " << command << process.readAllStandardError();
-    qDebug() << "Error: " << command << process.readAllStandardOutput();
-    process.close();
-}
 
 MainWindow::~MainWindow()
 {
+    delete editor;
     delete ui;
+}
+
+void MainWindow::on_actionJson_Editor_triggered()
+{
+    editor = new EditorWindows(this);
+    this->setHidden(true);
+    editor->setWindowFlags(Qt::Window);
+
+    // Position child window
+    const QRect geometry = this->geometry();
+    QPoint pos = this->pos();
+    editor->move(pos.rx(), pos.ry());
+    editor->resize(geometry.width(), geometry.height());
+
+    editor->show();
 }

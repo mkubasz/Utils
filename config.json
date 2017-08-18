@@ -2,6 +2,10 @@
 	"configuration" : [
 		{"name" : "docker", "command" : "docker restart decisco"},
 		{"name" : "gedit", "command" : " x-terminal-emulator -x bash -c \"echo true;bash\""},
-		{"name" : "bash", "command" : "bash"}
+		{"name" : "bash", "command" : "bash"},
+		{"name" : "vpnc", "command" : "gksudo vpnc"},
+		{"name" : "vpnc-disconnect", "command" : "vpnc-disconnect"},
+		{"name" : "linsee175", "command" : "x-terminal-emulator -x bash -c \"ssh wrlinb175.emea.nsn-net.net\""},
+		{"name" : "gedit", "command" : "gedit"}
 	]
 }

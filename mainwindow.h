@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "config.h"
+#include "editorwindows.h"
 #include <QMainWindow>
 #include <QListWidget>
 #include <QMap>
@@ -23,8 +24,11 @@ private slots:
     void invokeOne(QListWidgetItem* item);
     void invokeAll();
 
+    void on_actionJson_Editor_triggered();
+
 private:
     Ui::MainWindow *ui;
+    EditorWindows* editor;
     QListWidget* names;
     QMap<QString, Config> map;
     void invoke(QString command);
