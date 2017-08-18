@@ -1,6 +1,9 @@
 {
 	"configuration" : [
 		{"name" : "docker", "command" : "docker restart decisco"},
+		{"name" : "vpnc", "command" : "vpnc"},
+		{"name" : "vpnc-disconnect", "command" : "vpnc-disconnect"},
+		{"name" : "linsee175", "command" : "x-terminal-emulator -e \"ssh wrlinb175.emea.nsn-net.net\""},
 		{"name" : "gedit", "command" : "gedit"}
 	]
 }
