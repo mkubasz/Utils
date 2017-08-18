@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     names = ui->names;
     connect(ui->btnLoad, SIGNAL(released()), this, SLOT(loadFile()));
     connect(ui->btnInvoke, SIGNAL(released()),this, SLOT(invokeAll()));
+    connect(names, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(invokeOne(QListWidgetItem*)));
 }
 
 void MainWindow::loadFile()
@@ -36,7 +37,6 @@ void MainWindow::loadFile()
     {
           names->addItem(it.key());
     }
-    connect(names, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(invokeOne(QListWidgetItem*)));
 }
 
 void MainWindow::invokeOne(QListWidgetItem* item)
