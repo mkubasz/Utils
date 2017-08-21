@@ -5,7 +5,6 @@
 #include <QMessageBox>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QFile>
 #include <QFileDialog>
 #include <QProcess>
 #include <QDebug>
@@ -19,18 +18,44 @@ MainWindow::MainWindow(QWidget *parent) :
     names = ui->names;
 
     // Set connects
-    connect(ui->btnLoad, SIGNAL(released()), this, SLOT(loadFile()));
+    connect(ui->btnLoad, SIGNAL(released()), this, SLOT(selectConfigAndLoad()));
     connect(ui->btnInvoke, SIGNAL(released()),this, SLOT(invokeAll()));
     connect(names, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(invokeOne(QListWidgetItem*)));
+
+    loadDefaultConfig();
 }
 
-void MainWindow::loadFile()
+void MainWindow::selectConfigAndLoad()
 {
     ui->loaded->setChecked(false);
     names->clear();
-    const QString fn = QFileDialog::getOpenFileName(this, tr("Open Config"),NULL, tr("Json Files (*.json)"));
+    QFile configFile(QFileDialog::getOpenFileName(this, tr("Open Config"),NULL, tr("Json Files (*.json)")));
+    loadConfigFile(configFile);
+}
 
-    QFile file(fn);
+void MainWindow::loadDefaultConfig()
+{
+    QString fn = "./config.json";
+
+#ifdef QT_DEBUG
+    fn = "../Utils/config.json";
+#endif
+
+    QFile configFile(fn);
+    if(configFile.exists())
+    {
+        loadConfigFile(configFile);
+    }
+}
+
+void MainWindow::loadConfigFile(QFile &file)
+{
+    if (!file.exists())
+    {
+        qDebug() << "Cannot find file: " + file.fileName();
+        QMessageBox::critical(this, "Error", "Cannot find config file.",QMessageBox::StandardButton::Abort, 0);
+        return;
+    }
     file.open(QIODevice::ReadOnly);
 
     QJsonDocument jdoc = QJsonDocument::fromJson(file.readAll());
@@ -38,7 +63,7 @@ void MainWindow::loadFile()
 
     if(obj.empty())
     {
-        qDebug() << "Parse " + fn + " file error.";
+        qDebug() << "Parse " + file.fileName() + " file error.";
         QMessageBox::critical(this, "Error", "Error parse json file",QMessageBox::StandardButton::Abort, 0);
         return;
     }

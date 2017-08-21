@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QListWidget>
 #include <QMap>
+#include <QFile>
 
 namespace Ui {
 class MainWindow;
@@ -20,7 +21,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void loadFile();
+    void selectConfigAndLoad();
     void invokeOne(QListWidgetItem* item);
     void invokeAll();
 
@@ -32,6 +33,8 @@ private:
     QListWidget* names;
     QMap<QString, Config> map;
     void invoke(QString command);
+    void loadDefaultConfig();
+    void loadConfigFile(QFile &file);
 };
 
 #endif // MAINWINDOW_H
