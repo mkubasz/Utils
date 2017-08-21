@@ -15,12 +15,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    names = ui->names;
+    commandList = ui->lsCommands;
+    toDoList = ui->lsToDo;
 
     // Set connects
     connect(ui->btnLoad, SIGNAL(released()), this, SLOT(selectConfigAndLoad()));
-    connect(ui->btnInvoke, SIGNAL(released()),this, SLOT(invokeAll()));
-    connect(names, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(invokeOne(QListWidgetItem*)));
+    connect(ui->btnDo, SIGNAL(released()),this, SLOT(doAll()));
+    connect(ui->btnClear, SIGNAL(released()),this, SLOT(clearAll()));
+    connect(ui->btnAdd, SIGNAL(released()), this, SLOT(addToDo()));
+    connect(ui->btnRemove, SIGNAL(released()),this, SLOT(removeFromDo()));
+    connect(commandList, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(invokeOne(QListWidgetItem*)));
 
     loadDefaultConfig();
 }
@@ -28,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::selectConfigAndLoad()
 {
     ui->loaded->setChecked(false);
-    names->clear();
+    commandList->clear();
     QFile configFile(QFileDialog::getOpenFileName(this, tr("Open Config"),NULL, tr("Json Files (*.json)")));
     loadConfigFile(configFile);
 }
@@ -76,8 +80,22 @@ void MainWindow::loadConfigFile(QFile &file)
 
     for(auto it = map.begin(); it != map.end(); ++it)
     {
-          names->addItem(it.key());
+          commandList->addItem(it.key());
     }
+}
+
+void MainWindow::addToDo()
+{
+    QList<QListWidgetItem *> selected = commandList->selectedItems();
+    for(auto item : selected)
+    {
+        toDoList->addItem(item->text());
+    }
+}
+
+void MainWindow::removeFromDo()
+{
+    qDeleteAll(toDoList->selectedItems());
 }
 
 void MainWindow::invoke(QString command)
@@ -97,12 +115,18 @@ void MainWindow::invokeOne(QListWidgetItem* item)
     invoke(command);
 }
 
-void MainWindow::invokeAll()
+void MainWindow::doAll()
 {
-    for(auto it = map.begin(); it != map.end(); ++it)
+    for(int i = 0; i < toDoList->count(); ++i)
     {
-        invoke(it.value().command);
+        const QString command = map[toDoList->item(i)->text()].command;
+        invoke(command);
     }
+}
+
+void MainWindow::clearAll()
+{
+    toDoList->clear();
 }
 
 

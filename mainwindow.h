@@ -23,14 +23,17 @@ public:
 private slots:
     void selectConfigAndLoad();
     void invokeOne(QListWidgetItem* item);
-    void invokeAll();
-
+    void doAll();
+    void clearAll();
+    void addToDo();
+    void removeFromDo();
     void on_actionJson_Editor_triggered();
 
 private:
     Ui::MainWindow *ui;
     EditorWindows* editor;
-    QListWidget* names;
+    QListWidget* commandList;
+    QListWidget* toDoList;
     QMap<QString, Config> map;
     void invoke(QString command);
     void loadDefaultConfig();
