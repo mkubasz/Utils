@@ -14,13 +14,13 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="btnInvoke">
+   <widget class="QPushButton" name="btnDo">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>300</y>
-      <width>89</width>
-      <height>25</height>
+      <x>490</x>
+      <y>240</y>
+      <width>100</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -40,7 +40,7 @@
      <string>Load</string>
     </property>
    </widget>
-   <widget class="QListWidget" name="names">
+   <widget class="QListWidget" name="lsCommands">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -88,17 +88,53 @@
      <string>Pointless button</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QListWidget" name="lsToDo">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>270</y>
-      <width>221</width>
-      <height>21</height>
+      <x>340</x>
+      <y>40</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnAdd">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>90</y>
+      <width>31</width>
+      <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>Warning, proceed with caution!</string>
+     <string>&gt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnRemove">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>130</y>
+      <width>31</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnClear">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>240</y>
+      <width>100</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear ALL</string>
     </property>
    </widget>
   </widget>
