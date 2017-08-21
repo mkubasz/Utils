@@ -18,13 +18,13 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>250</y>
+      <y>300</y>
       <width>89</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>Do</string>
+     <string>Do ALL</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnLoad">
@@ -88,6 +88,19 @@
      <string>Reload</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>270</y>
+      <width>221</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Warning, proceed with caution!</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -95,7 +108,7 @@
      <x>0</x>
      <y>0</y>
      <width>669</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
