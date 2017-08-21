@@ -1,11 +1,10 @@
 {
 	"configuration" : [
-		{"name" : "docker", "command" : "docker restart decisco"},
-        {"name" : "gedit", "command" : " x-terminal-emulator -x $SHELL -c \"echo true;bash\""},
-		{"name" : "bash", "command" : "bash"},
-		{"name" : "vpnc", "command" : "gksudo vpnc"},
+        {"name" : "docker-restart", "command" : "docker restart decisco"},
+        {"name" : "vpnc-start", "command" : "gksudo vpnc"},
 		{"name" : "vpnc-disconnect", "command" : "vpnc-disconnect"},
         {"name" : "linsee175", "command" : "x-terminal-emulator -x $SHELL -c \"ssh wrlinb175.emea.nsn-net.net\""},
-		{"name" : "gedit", "command" : "gedit"}
+        {"name" : "slack", "command" : "xdg-open https://nokia5g.slack.com"},
+        {"name" : "gedit-test", "command" : "gedit"}
 	]
 }
