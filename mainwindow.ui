@@ -78,14 +78,14 @@
    <widget class="QPushButton" name="reload">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>170</x>
       <y>10</y>
-      <width>89</width>
+      <width>121</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>Reload</string>
+     <string>Pointless button</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
